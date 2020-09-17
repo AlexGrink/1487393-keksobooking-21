@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Александр Гринкевич](https://up.htmlacademy.ru/javascript/21/user/1487393).
-* Наставник: `Неизвестно`.
+- Студент: [Александр Гринкевич](https://up.htmlacademy.ru/javascript/21/user/1487393).
+- Наставник: [Вадим Попов](https://htmlacademy.ru/profile/id1503771).
 
 ---
 
