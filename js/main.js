@@ -1,6 +1,6 @@
 "use strict";
-const mapPinsList = document.querySelector(`.map__pins`);
-const TOTAL_ADS = 8;
+const PIN_X_OFFSET = 25;
+const PIN_Y_OFFSET = 70;
 const TITLE = [`дворец1`, `дворец2`, `квартира1`, `квартира2`, `дом1`, `дом2`, `бунгало1`, `бунгало2`];
 const CHECKIN = [`12:00`, `13:00`, `14:00`];
 const CHECKOUT = [`12:00`, `13:00`, `14:00`];
@@ -11,17 +11,17 @@ const PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
 ];
 
-const getRandomFromInterval = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+
+const mapPinsList = document.querySelector(`.map__pins`);
+
 
 const createMapContent = () => {
   const mapsContent = [];
 
-  for (let i = 1; i <= TOTAL_ADS; i++) {
+  for (let i = 1; i <= 8; i++) {
     const locations = {
       x: getRandomFromInterval(0, 1200),
-      y: getRandomFromInterval(130, 630),
+      y: getRandomFromInterval(0, 630),
     };
     const content = {
       author: {
@@ -32,7 +32,7 @@ const createMapContent = () => {
         y: locations.y,
       },
       offer: {
-        title: TITLE[i],
+        title: TITLE[getRandomFromInterval(0, 7)],
         address: locations.x + `, ` + locations.y,
         price: getRandomFromInterval(1000, 1000000),
         rooms: getRandomFromInterval(1, 5),
@@ -56,17 +56,17 @@ const createMapPin = (template, content) => {
   const mapPinElement = template.cloneNode(true);
   mapPinElement.querySelector(`img`).src = content.author.avatar;
   mapPinElement.querySelector(`img`).alt = content.offer.title;
-  mapPinElement.style.left = content.location.x + 25 + `px`;
-  mapPinElement.style.top = content.location.y + 70 + `px`;
+  mapPinElement.style.left = content.location.x + PIN_X_OFFSET + `px`;
+  mapPinElement.style.top = content.location.y + PIN_Y_OFFSET + `px`;
   return mapPinElement;
 };
 
 const generateMapPins = (mapsContent) => {
   const fragment = document.createDocumentFragment();
   const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-  for (let i = 0; i < mapsContent.length; i++) {
-    fragment.appendChild(createMapPin(mapPinTemplate, mapsContent[i]));
-  }
+  mapsContent.forEach((item) => {
+    fragment.appendChild(createMapPin(mapPinTemplate, item));
+  });
   mapPinsList.appendChild(fragment);
 };
 
