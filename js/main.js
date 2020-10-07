@@ -11,17 +11,13 @@ const PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
 ];
 
-
 const mapPinsList = document.querySelector(`.map__pins`);
-
-
-const createMapContent = () => {
+const createMapContent = (count) => {
   const mapsContent = [];
-
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= count; i++) {
     const locations = {
-      x: getRandomFromInterval(0, 1200),
-      y: getRandomFromInterval(0, 630),
+      x: window.utils.getRandomFromInterval(0, 1200),
+      y: window.utils.getRandomFromInterval(0, 630),
     };
     const content = {
       author: {
@@ -32,17 +28,21 @@ const createMapContent = () => {
         y: locations.y,
       },
       offer: {
-        title: TITLE[getRandomFromInterval(0, 7)],
+        title: TITLE[window.utils.getRandomFromInterval(0, 7)],
         address: locations.x + `, ` + locations.y,
-        price: getRandomFromInterval(1000, 1000000),
-        rooms: getRandomFromInterval(1, 5),
-        guests: getRandomFromInterval(1, 20),
-        checkin: CHECKIN[getRandomFromInterval(0, 2)],
-        checkout: CHECKOUT[getRandomFromInterval(0, 2)],
+        price: window.utils.getRandomFromInterval(1000, 1000000),
+        rooms: window.utils.getRandomFromInterval(1, 5),
+        guests: window.utils.getRandomFromInterval(1, 20),
+        checkin: CHECKIN[window.utils.getRandomFromInterval(0, 2)],
+        checkout: CHECKOUT[window.utils.getRandomFromInterval(0, 2)],
         description: ``,
-        features: FEATURES.slice(0, getRandomFromInterval(0, 5)),
-        photos: PHOTOS.slice(0, getRandomFromInterval(0, 2)),
-      },
+        features: FEATURES.filter(() => {
+          return window.utils.getRandomFromInterval(0, 2);
+        }),
+        photos: PHOTOS.filter(() => {
+          return window.utils.getRandomFromInterval(0, 2);
+        })
+      }
     };
 
     mapsContent.push(content);
@@ -70,4 +70,4 @@ const generateMapPins = (mapsContent) => {
   mapPinsList.appendChild(fragment);
 };
 
-generateMapPins(createMapContent());
+generateMapPins(createMapContent(8));
