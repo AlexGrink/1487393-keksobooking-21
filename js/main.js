@@ -1,4 +1,7 @@
 "use strict";
+const mapPinsList = document.querySelector(`.map__pins`);
+const addressInput = document.querySelector(`[name = address]`);
+const mapPinMain = mapPinsList.querySelector(`.map__pin--main`);
 const PIN_X_OFFSET = 25;
 const PIN_Y_OFFSET = 70;
 const TITLE = [`дворец1`, `дворец2`, `квартира1`, `квартира2`, `дом1`, `дом2`, `бунгало1`, `бунгало2`];
@@ -11,7 +14,6 @@ const PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
 ];
 
-const mapPinsList = document.querySelector(`.map__pins`);
 const createMapContent = (count) => {
   const mapsContent = [];
   for (let i = 1; i <= count; i++) {
@@ -44,13 +46,11 @@ const createMapContent = (count) => {
         })
       }
     };
-
     mapsContent.push(content);
   }
   return mapsContent;
 };
 
-document.querySelector(`.map`).classList.remove(`map--faded`);
 
 const createMapPin = (template, content) => {
   const mapPinElement = template.cloneNode(true);
@@ -70,4 +70,35 @@ const generateMapPins = (mapsContent) => {
   mapPinsList.appendChild(fragment);
 };
 
-generateMapPins(createMapContent(8));
+
+const fieldsets = document.querySelectorAll(`fieldset`);
+fieldsets.forEach((item) => {
+  item.setAttribute(`disabled`, `true`);
+});
+
+const setActiveState = () => {
+  document.querySelector(`.ad-form`).classList.remove(`ad-form--disabled`);
+  document.querySelector(`.map`).classList.remove(`map--faded`);
+  generateMapPins(createMapContent()); // В таком виде ничего не делает. Временно
+  fieldsets.forEach((item) => {
+    item.removeAttribute(`disabled`);
+  });
+};
+
+const fillPinPostition = (elem) => {
+  let box = elem.getBoundingClientRect();
+  addressInput.value = Math.round(box.x + pageXOffset) + PIN_X_OFFSET + `,` + Math.round(box.y + pageYOffset);
+};
+
+mapPinMain.addEventListener(`mousedown`, (evt) => {
+  if (evt.button === 0) {
+    setActiveState();
+    fillPinPostition(mapPinMain);
+  }
+});
+mapPinMain.addEventListener(`keydown`, (evt) => {
+  if (evt.keyCode === 13) {
+    setActiveState();
+    fillPinPostition(mapPinMain);
+  }
+});
