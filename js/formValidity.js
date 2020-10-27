@@ -1,17 +1,12 @@
 "use strict";
 const adForm = document.querySelector(`.ad-form`);
-const typeSelect = adForm.querySelector(`[id=type]`);
-const priceValue = adForm.querySelector(`[id=price]`);
-const checkIn = adForm.querySelector(`[id=timein]`);
-const checkOut = adForm.querySelector(`[id=timeout]`);
-const roomNumber = adForm.querySelector(`[id=room_number]`);
-const roomCapacity = adForm.querySelector(`[id=capacity]`);
-const livingRules = {
-  '1 комната': `для 1 гостя`,
-  '2 комнаты': [`для 1 гостя`, `для 2 гостей`],
-  '3 комнаты': [`для 1 гостя`, `для 2 гостей`, `для 3 гостей`],
-  '100 комнат': `не для гостей`,
-};
+const typeSelect = adForm.querySelector(`#type`);
+const priceValue = adForm.querySelector(`#price`);
+const checkIn = adForm.querySelector(`#timein`);
+const checkOut = adForm.querySelector(`#timeout`);
+const roomNumber = adForm.querySelector(`#room_number`);
+const roomCapacity = adForm.querySelector(`#capacity`);
+
 /* Задаем минимальную цену для выбранного Типа жилья */
 const setMinPrice = () => {
   if (typeSelect.value === `bungalow`) {
@@ -55,31 +50,25 @@ const setCheckInLink = () => {
 
 const setGuestsLimit = () => {
   let roomNumberValue = roomNumber.options[roomNumber.selectedIndex].value;
-  let roomCapacityContent = roomCapacity.options[roomCapacity.selectedIndex].textContent;
+  roomCapacity.options[0].disabled = true;
+  roomCapacity.options[1].disabled = true;
+  roomCapacity.options[2].disabled = true;
+  roomCapacity.options[3].disabled = true;
   if (roomNumberValue === `1`) {
-    if (roomCapacityContent === livingRules[`1 комната`]) {
-      roomCapacity.setCustomValidity(``);
-    } else {
-      roomCapacity.setCustomValidity(`Количество гостей не должно превышать количество комнат`);
-    }
+    roomCapacity.value = `1`;
+    roomCapacity.options[2].disabled = false;
   } else if (roomNumberValue === `2`) {
-    if (livingRules[`2 комнаты`].includes(roomCapacityContent)) {
-      roomCapacity.setCustomValidity(``);
-    } else {
-      roomCapacity.setCustomValidity(`Количество гостей не должно превышать количество комнат`);
-    }
+    roomCapacity.value = `2`;
+    roomCapacity.options[2].disabled = false;
+    roomCapacity.options[1].disabled = false;
   } else if (roomNumberValue === `3`) {
-    if (livingRules[`3 комнаты`].includes(roomCapacityContent)) {
-      roomCapacity.setCustomValidity(``);
-    } else {
-      roomCapacity.setCustomValidity(`Количество гостей не должно превышать количество комнат`);
-    }
+    roomCapacity.value = `3`;
+    roomCapacity.options[2].disabled = false;
+    roomCapacity.options[1].disabled = false;
+    roomCapacity.options[0].disabled = false;
   } else {
-    if (roomCapacityContent === livingRules[`100 комнат`]) {
-      roomCapacity.setCustomValidity(``);
-    } else {
-      roomCapacity.setCustomValidity(`только "не для гостей"`);
-    }
+    roomCapacity.value = `0`;
+    roomCapacity.options[3].disabled = false;
   }
 };
 
@@ -93,6 +82,9 @@ checkOut.addEventListener(`input`, () => {
 
 typeSelect.addEventListener(`input`, () => {
   setMinPrice();
+});
+roomNumber.addEventListener(`input`, () => {
+  setGuestsLimit();
 });
 
 roomCapacity.addEventListener(`input`, () => {
