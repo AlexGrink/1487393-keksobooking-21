@@ -87,10 +87,6 @@ roomNumber.addEventListener(`input`, () => {
   setGuestsLimit();
 });
 
-roomCapacity.addEventListener(`input`, () => {
-  setGuestsLimit();
-});
-
 document.addEventListener(`DOMContentLoaded`, function () {
   setCheckInLink();
   setGuestsLimit();
